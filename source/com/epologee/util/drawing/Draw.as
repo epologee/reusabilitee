@@ -11,163 +11,165 @@ package com.epologee.util.drawing {
 		public static const CENTER : String = "CENTER";
 		public static const NO_OFFSET : Point = new Point();
 
-		public static function square(inCanvas : *, inSize : Number = 64, inColor : int = 0xFF9900, inAlpha : Number = 1, inCentered : Boolean = false) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function square(canvas : *, size : Number = 64, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawRect(inCentered ? -inSize / 2 : 0, inCentered ? -inSize / 2 : 0, inSize, inSize);
+			g.drawRect(centered ? -size / 2 : 0, centered ? -size / 2 : 0, size, size);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function rectangle(inCanvas : *, inWidth : Number = 64, inHeight : Number = 32, inColor : int = 0xFF9900, inAlpha : Number = 1, inOffset : * = null) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function rectangle(canvas : *, width : Number = 64, height : Number = 32, color : int = 0xFF9900, alpha : Number = 1, offset : * = null) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			if (inOffset == CENTER)
-				inOffset = new Point(-inWidth / 2, inHeight / 2);
-			if (!(inOffset is Point))
-				inOffset = NO_OFFSET;
+			if (offset == CENTER)
+				offset = new Point(-width / 2, height / 2);
+			if (!(offset is Point))
+				offset = NO_OFFSET;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawRect(inOffset.x, inOffset.y, inWidth, inHeight);
+			g.drawRect(offset.x, offset.y, width, height);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function window(inCanvas : *, inWidth : Number = 64, inHeight : Number = 32, inThickness : Number = 4, inColor : int = 0xFF9900, inAlpha : Number = 1, inCentered : Boolean = false) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function window(canvas : *, width : Number = 64, height : Number = 32, thickness : Number = 4, color : int = 0xFF9900, alpha : Number = 1, offset : Point = null) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			offset ||= new Point();
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			var g : Graphics = canvas.graphics;
+
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawRect(inCentered ? -inWidth / 2 : 0, inCentered ? -inHeight / 2 : 0, inWidth, inHeight);
-			g.drawRect(inThickness + (inCentered ? -inWidth / 2 : 0), inThickness + (inCentered ? -inHeight / 2 : 0), inWidth - inThickness * 2, inHeight - inThickness * 2);
+			g.drawRect(offset.x, offset.y, width, height);
+			g.drawRect(thickness + offset.x, thickness + offset.y, width - thickness * 2, height - thickness * 2);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function roundedRectangle(inCanvas : *, inWidth : Number = 64, inHeight : Number = 32, inCornerRadius : Number = 4, inColor : int = 0xFF9900, inAlpha : Number = 1, inCentered : Boolean = false) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function roundedRectangle(canvas : *, width : Number = 64, height : Number = 32, cornerRadius : Number = 4, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawRoundRect(inCentered ? -inWidth / 2 : 0, inCentered ? -inHeight / 2 : 0, inWidth, inHeight, inCornerRadius * 2, inCornerRadius * 2);
+			g.drawRoundRect(centered ? -width / 2 : 0, centered ? -height / 2 : 0, width, height, cornerRadius * 2, cornerRadius * 2);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function circle(inCanvas : *, inRadius : Number = 16, inColor : int = 0xFF9900, inAlpha : Number = 1, inCentered : Boolean = false) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function circle(canvas : *, inRadius : Number = 16, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawCircle(inCentered ? 0 : inRadius, inCentered ? 0 : inRadius, inRadius);
+			g.drawCircle(centered ? 0 : inRadius, centered ? 0 : inRadius, inRadius);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function ring(inCanvas : *, inRadius : Number = 16, inThickness : Number = 4, inColor : int = 0xFF9900, inAlpha : Number = 1, inCentered : Boolean = false) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function ring(canvas : *, inRadius : Number = 16, thickness : Number = 4, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawCircle(inCentered ? 0 : inRadius, inCentered ? 0 : inRadius, inRadius);
-			g.drawCircle(inCentered ? 0 : inRadius, inCentered ? 0 : inRadius, inRadius - inThickness);
+			g.drawCircle(centered ? 0 : inRadius, centered ? 0 : inRadius, inRadius);
+			g.drawCircle(centered ? 0 : inRadius, centered ? 0 : inRadius, inRadius - thickness);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function ellipse(inCanvas : *, inWidth : Number = 64, inHeight : Number = 32, inColor : int = 0xFF9900, inAlpha : Number = 1, inCentered : Boolean = false) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function ellipse(canvas : *, width : Number = 64, height : Number = 32, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.drawEllipse(inCentered ? -inWidth / 2 : 0, inCentered ? -inHeight / 2 : 0, inWidth, inHeight);
+			g.drawEllipse(centered ? -width / 2 : 0, centered ? -height / 2 : 0, width, height);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function polygon(inCanvas : *, inPoints : Array, inColor : int = 0xFF9900, inAlpha : Number = 1) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function polygon(canvas : *, inPoints : Array, color : int = 0xFF9900, alpha : Number = 1) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
 			if (!inPoints || inPoints.length < 3)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
 			var started : Boolean = false;
 			for each (var o : Object in inPoints) {
 				if (o is Array) o = new Point(o[0], o[1]);
-				
+
 				if (!started) {
 					g.moveTo(o.x, o.y);
 					started = true;
@@ -179,86 +181,86 @@ package com.epologee.util.drawing {
 			// close polygon
 			g.lineTo(inPoints[0].x, inPoints[0].y);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function arrow(inCanvas : *, inLength : Number = 7, inWidth : Number = 14, inColor : int = 0xFF9900, inAlpha : Number = 1, inOffset : Point = null) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function arrow(canvas : *, length : Number = 7, width : Number = 14, color : int = 0xFF9900, alpha : Number = 1, offset : Point = null) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			var offset : Point = inOffset || new Point(0, 0);
+			offset ||= new Point(0, 0);
 
-			g.moveTo(-inLength / 2 + offset.x, offset.y - inWidth / 2);
-			g.lineTo(inLength / 2 + offset.x, offset.y);
-			g.lineTo(-inLength / 2 + offset.x, offset.y + inWidth / 2);
-			g.lineTo(-inLength / 2 + offset.x, offset.y - inWidth / 2);
+			g.moveTo(-length / 2 + offset.x, offset.y - width / 2);
+			g.lineTo(length / 2 + offset.x, offset.y);
+			g.lineTo(-length / 2 + offset.x, offset.y + width / 2);
+			g.lineTo(-length / 2 + offset.x, offset.y - width / 2);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function check(inCanvas : *, inSize : Number = 7, inTaper : Number = 0, inColor : int = 0xFF9900, inAlpha : Number = 1) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function check(canvas : *, size : Number = 7, taper : Number = 0, color : int = 0xFF9900, alpha : Number = 1) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
+			var g : Graphics = canvas.graphics;
 
-			if (inColor != NO_COLOR) {
-				g.beginFill(inColor, inAlpha);
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
 			}
 
-			g.lineTo(inSize, -inSize);
-			g.lineTo(inSize, -inSize + inTaper);
-			g.lineTo(0, inSize / 2);
-			g.lineTo(-inSize / 2, -inSize / 2 + inTaper);
-			g.lineTo(-inSize / 2, -inSize / 2);
+			g.lineTo(size, -size);
+			g.lineTo(size, -size + taper);
+			g.lineTo(0, size / 2);
+			g.lineTo(-size / 2, -size / 2 + taper);
+			g.lineTo(-size / 2, -size / 2);
 			g.lineTo(0, 0);
 
-			if (inColor != NO_COLOR) {
+			if (color != NO_COLOR) {
 				g.endFill();
 			}
 
-			return inCanvas;
+			return canvas;
 		}
 
-		public static function cross(inCanvas : *, inWidth : Number = 7, inHeight : Number = 7, inThickness : Number = 1, inColor : int = 0x000000, inAlpha : Number = 1) : * {
-			if (!inCanvas || !inCanvas.graphics)
+		public static function cross(canvas : *, width : Number = 7, height : Number = 7, thickness : Number = 1, color : int = 0x000000, alpha : Number = 1) : * {
+			if (!canvas || !canvas.graphics)
 				return null;
 
-			var g : Graphics = inCanvas.graphics;
-			g.lineStyle(inThickness, inColor, inAlpha);
-			g.beginFill(inColor, inAlpha);
+			var g : Graphics = canvas.graphics;
+			g.lineStyle(thickness, color, alpha);
+			g.beginFill(color, alpha);
 			g.lineTo(0, 0);
-			g.lineTo(inWidth, inHeight);
-			g.moveTo(inWidth, 0);
-			g.lineTo(0, inHeight);
+			g.lineTo(width, height);
+			g.moveTo(width, 0);
+			g.lineTo(0, height);
 			g.endFill();
 
-			return inCanvas;
+			return canvas;
 		}
-		
+
 		/**
 		 * Clear the graphics of an untyped object.
 		 */
-		public static function clear(inCanvas : *) : void {
-			inCanvas.graphics.clear();
+		public static function clear(canvas : *) : void {
+			canvas.graphics.clear();
 		}
 
-		public static function lineStyle(inCanvas : Shape, inThickness : Number = 1, inColor : int = 0x000000, inAlpha : Number = 1, inPixelHinting : Boolean = false) : void {
-			inCanvas.graphics.lineStyle(inThickness, inColor, inAlpha, inPixelHinting);
+		public static function lineStyle(canvas : Shape, thickness : Number = 1, color : int = 0x000000, alpha : Number = 1, pixelHinting : Boolean = false) : void {
+			canvas.graphics.lineStyle(thickness, color, alpha, pixelHinting);
 		}
 	}
 }
