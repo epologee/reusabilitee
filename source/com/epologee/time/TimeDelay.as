@@ -6,6 +6,8 @@ package com.epologee.time {
 	import flash.utils.Timer;
 
 	public class TimeDelay {
+		public var catchErrors : Boolean = true;
+		//
 		private var _callback : Function;
 		private var _parameters : Array;
 		private var _timer : Timer;
@@ -31,12 +33,12 @@ package com.epologee.time {
 			_stack = new Error().getStackTrace();
 			_callback = inCallback;
 			_parameters = inParams;
-			
+
 			_timer = new Timer(inTime, 1);
 			_timer.addEventListener(TimerEvent.TIMER, handleTimerEvent);
-			
+
 			_cleanup = inCleanupAfterDelay;
-			
+
 			if (inStartInstantly) {
 				resetAndStart();
 			}
@@ -86,22 +88,37 @@ package com.epologee.time {
 		 * @param e: not used
 		 */
 		private function handleTimerEvent(e : Event) : void {
+			if (catchErrors) {
+				safeCallback();
+			} else {
+				simpleCallback();
+			}
+			if (_cleanup) {
+				die();
+			}
+		}
+
+		private function simpleCallback() : void {
+			if (_parameters == null) {
+				_callback();
+			} else {
+				_callback.apply(null, _parameters);
+			}
+		}
+
+		private function safeCallback() : void {
 			if (_parameters == null) {
 				try {
 					_callback();
-				}catch(e : Error) {
+				} catch(e : Error) {
 					logger.error("Time delay error (no arguments): " + e.message + (_stack ? "\n" + _stack.split("\n").slice(2).join("\n") : ""));
 				}
 			} else {
 				try {
 					_callback.apply(null, _parameters);
-				}catch(e : Error) {
+				} catch(e : Error) {
 					logger.error("Time delay error (with arguments): " + e.message + (_stack ? "\n" + _stack.split("\n").slice(2).join("\n") : ""));
 				}
-			}
-
-			if (_cleanup) {
-				die();
 			}
 		}
 	}
