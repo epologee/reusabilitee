@@ -94,8 +94,6 @@ package com.epologee.ui.scrolling {
 		 * @param inPageSize amount of pixels per page-up/-down. FIXME: Not yet implemented
 		 */
 		public function initialize(inWindowSize : Number, inContentSize : Number, inPageSize : Number = 1, inLayout : String = LAYOUT_VERTICAL) : void {
-			logger.debug("inWindowSize: " + inWindowSize);
-			logger.debug("inContentSize: " + inContentSize);
 			_layout = inLayout;
 			setWindowSize(inWindowSize);
 			setContentSize(inContentSize);
