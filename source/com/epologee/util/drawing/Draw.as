@@ -75,6 +75,28 @@ package com.epologee.util.drawing {
 
 			return canvas;
 		}
+		
+		public static function roundedWindow(canvas : *, width : Number = 64, height : Number = 32, thickness : Number = 4, cornerRadius : Number = 4, color : int = 0xFF9900, alpha : Number = 1, offset : Point = null) : * {
+			if (!canvas || !canvas.graphics)
+				return null;
+
+			offset ||= new Point();
+
+			var g : Graphics = canvas.graphics;
+
+			if (color != NO_COLOR) {
+				g.beginFill(color, alpha);
+			}
+
+			g.drawRoundRect(offset.x, offset.y, width, height, cornerRadius * 2, cornerRadius * 2);
+			g.drawRoundRect(thickness + offset.x, thickness + offset.y, width - thickness * 2, height - thickness * 2, cornerRadius * 2, cornerRadius * 2);
+
+			if (color != NO_COLOR) {
+				g.endFill();
+			}
+
+			return canvas;
+		}
 
 		public static function roundedRectangle(canvas : *, width : Number = 64, height : Number = 32, cornerRadius : Number = 4, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
 			if (!canvas || !canvas.graphics)
