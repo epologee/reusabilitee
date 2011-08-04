@@ -281,9 +281,9 @@
 			var g : Graphics = canvas.graphics;
 			g.lineStyle(thickness, color, alpha);
 			g.beginFill(color, alpha);
-			g.moveTo(width/2, 0);
+			g.moveTo(width/2, thickness/2);
 			g.lineTo(width/2, height);
-			g.moveTo(0, height/2);
+			g.moveTo(thickness/2, height/2);
 			g.lineTo(width, height/2);
 			g.endFill();
 
