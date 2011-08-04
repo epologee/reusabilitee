@@ -1,4 +1,4 @@
-package com.epologee.util.drawing {
+	package com.epologee.util.drawing {
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.geom.Point;
@@ -281,9 +281,9 @@ package com.epologee.util.drawing {
 			var g : Graphics = canvas.graphics;
 			g.lineStyle(thickness, color, alpha);
 			g.beginFill(color, alpha);
-			g.moveTo((width+thickness)/2, 0);
+			g.moveTo((width+thickness)/2, thickness/2);
 			g.lineTo((width+thickness)/2, height);
-			g.moveTo(0, (height+thickness)/2);
+			g.moveTo(thickness/2, (height+thickness)/2);
 			g.lineTo(width, (height+thickness)/2);
 			g.endFill();
 
