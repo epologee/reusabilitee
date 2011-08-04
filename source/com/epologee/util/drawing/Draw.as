@@ -274,6 +274,22 @@ package com.epologee.util.drawing {
 			return canvas;
 		}
 
+		public static function plus(canvas : *, width : Number = 7, height : Number = 7, thickness : Number = 1, color : int = 0x000000, alpha : Number = 1) : * {
+			if (!canvas || !canvas.graphics)
+				return null;
+
+			var g : Graphics = canvas.graphics;
+			g.lineStyle(thickness, color, alpha);
+			g.beginFill(color, alpha);
+			g.moveTo(width/2, 0);
+			g.lineTo(width/2, height);
+			g.moveTo(0, height/2);
+			g.lineTo(width, height/2);
+			g.endFill();
+
+			return canvas;
+		}
+
 		/**
 		 * Clear the graphics of an untyped object.
 		 */
