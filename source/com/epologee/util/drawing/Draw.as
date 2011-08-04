@@ -117,7 +117,7 @@ package com.epologee.util.drawing {
 			return canvas;
 		}
 
-		public static function circle(canvas : *, inRadius : Number = 16, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = false) : * {
+		public static function circle(canvas : *, inRadius : Number = 16, color : int = 0xFF9900, alpha : Number = 1, centered : Boolean = true) : * {
 			if (!canvas || !canvas.graphics)
 				return null;
 
