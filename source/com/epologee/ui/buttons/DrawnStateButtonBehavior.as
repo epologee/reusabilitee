@@ -2,6 +2,7 @@ package com.epologee.ui.buttons {
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.FocusEvent;
 	import flash.events.MouseEvent;
 
 	/**
@@ -17,7 +18,11 @@ package com.epologee.ui.buttons {
 	 * 			 
 	 */
 	[Event(name="CLICK", type="flash.events.MouseEvent")]
+	[Event(name="focusOut", type="flash.events.FocusEvent")]
+	[Event(name="focusIn", type="flash.events.FocusEvent")]
 	public class DrawnStateButtonBehavior extends EventDispatcher implements IEnableDisable {
+		//
+		private var _seamlessTabbing : Boolean = false;
 		//
 		private var _target : IHasDrawnStates;
 		private var _isEnabled : Boolean;
@@ -27,13 +32,10 @@ package com.epologee.ui.buttons {
 		private var _state : int;
 		private var _selected : Boolean;
 
-		public function get targetAsSprite() : Sprite {
-			return Sprite(_target);
-		}
-
 		public function DrawnStateButtonBehavior(inTargetSprite : IHasDrawnStates) {
 			_target = inTargetSprite;
 			targetAsSprite.mouseChildren = false;
+			targetAsSprite.tabChildren = false;
 
 			// the behavior needs the button to be on stage.
 			if (_target.stage) {
@@ -42,6 +44,32 @@ package com.epologee.ui.buttons {
 				_shouldEnable = true;
 				_target.addEventListener(Event.ADDED_TO_STAGE, handleTargetAddedToStage);
 			}
+		}
+
+		public function get targetAsSprite() : Sprite {
+			return Sprite(_target);
+		}
+
+		public function get seamlessTabbing() : Boolean {
+			return _seamlessTabbing;
+		}
+
+		public function set seamlessTabbing(seamlessTabbing : Boolean) : void {
+			_seamlessTabbing = seamlessTabbing;
+
+			if (_isEnabled) {
+				targetAsSprite.tabEnabled = _seamlessTabbing;
+				targetAsSprite.focusRect = _seamlessTabbing;
+
+				if (_seamlessTabbing) {
+					_target.addEventListener(FocusEvent.FOCUS_IN, handleFocusIn);
+					_target.addEventListener(FocusEvent.FOCUS_OUT, handleFocusOut);
+					return;
+				}
+			}
+
+			_target.removeEventListener(FocusEvent.FOCUS_IN, handleFocusIn);
+			_target.removeEventListener(FocusEvent.FOCUS_OUT, handleFocusOut);
 		}
 
 		private function handleTargetAddedToStage(event : Event) : void {
@@ -66,6 +94,9 @@ package com.epologee.ui.buttons {
 				_target.addEventListener(MouseEvent.MOUSE_OUT, handleMouseOut);
 				_target.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown);
 				_target.addEventListener(MouseEvent.CLICK, dispatchEvent);
+
+				// reapply seamless tabbing settings
+				seamlessTabbing = _seamlessTabbing;
 			}
 
 			forceDraw();
@@ -90,6 +121,9 @@ package com.epologee.ui.buttons {
 				if (targetAsSprite && targetAsSprite.stage) {
 					targetAsSprite.stage.removeEventListener(MouseEvent.MOUSE_UP, handleMouseUp);
 				}
+
+				// reapply seamless tabbing settings
+				seamlessTabbing = _seamlessTabbing;
 			}
 
 			forceDraw();
@@ -114,7 +148,7 @@ package com.epologee.ui.buttons {
 				IHasDisabledState(_target).drawDisabledState();
 			}
 		}
-		
+
 		public function get enabled() : Boolean {
 			return _isEnabled;
 		}
@@ -159,6 +193,16 @@ package com.epologee.ui.buttons {
 			_target = null;
 
 			delete(this);
+		}
+
+		private function handleFocusIn(event : FocusEvent) : void {
+			handleMouseOver(null);
+			dispatchEvent(event);
+		}
+
+		private function handleFocusOut(event : FocusEvent) : void {
+			handleMouseOut(null);
+			dispatchEvent(event);
 		}
 
 		private function handleMouseOver(event : MouseEvent) : void {
