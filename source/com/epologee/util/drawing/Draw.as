@@ -1,4 +1,4 @@
-	package com.epologee.util.drawing {
+package com.epologee.util.drawing {
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.geom.Point;
@@ -75,7 +75,7 @@
 
 			return canvas;
 		}
-		
+
 		public static function roundedWindow(canvas : *, width : Number = 64, height : Number = 32, thickness : Number = 4, cornerRadius : Number = 4, color : int = 0xFF9900, alpha : Number = 1, offset : Point = null) : * {
 			if (!canvas || !canvas.graphics)
 				return null;
@@ -281,10 +281,10 @@
 			var g : Graphics = canvas.graphics;
 			g.lineStyle(thickness, color, alpha);
 			g.beginFill(color, alpha);
-			g.moveTo(width/2, thickness/2);
-			g.lineTo(width/2, height);
-			g.moveTo(thickness/2, height/2);
-			g.lineTo(width, height/2);
+			g.moveTo(width / 2, thickness / 2);
+			g.lineTo(width / 2, height);
+			g.moveTo(thickness / 2, height / 2);
+			g.lineTo(width, height / 2);
 			g.endFill();
 
 			return canvas;
@@ -293,8 +293,14 @@
 		/**
 		 * Clear the graphics of an untyped object.
 		 */
-		public static function clear(canvas : *) : void {
-			canvas.graphics.clear();
+		public static function clear(...canvases : Array) : void {
+			try {
+				for each (var subcanvas : * in canvases) {
+					subcanvas.graphics.clear();
+				}
+			} catch (ei : Error) {
+				error("[i]: " + ei.message);
+			}
 		}
 
 		public static function lineStyle(canvas : Shape, thickness : Number = 1, color : int = 0x000000, alpha : Number = 1, pixelHinting : Boolean = false) : void {
