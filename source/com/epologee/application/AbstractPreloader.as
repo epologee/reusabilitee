@@ -1,2 +1,102 @@
-package com.epologee.application {	import com.epologee.application.preloader.AbstractPreloadElement;	import com.epologee.application.preloader.PEApplication;	import com.epologee.application.preloader.PreloadElementEvent;	import com.epologee.application.preloader.indicator.SpinnerIcon;	import com.epologee.util.drawing.Draw;	import com.epologee.util.drawing.ShapeDrawings;	import flash.display.DisplayObject;	import flash.display.DisplayObjectContainer;	import flash.events.Event;	import flash.events.EventDispatcher;	import flash.filters.DropShadowFilter;	import flash.geom.Point;	import flash.utils.getQualifiedClassName;	/**	 * @author Eric-Paul Lecluse | epologee.com (c) 2009	 * 	 * This class combines all preloading logic, to be used by both the PreloaderFactory and the AppController	 */	public class AbstractPreloader extends EventDispatcher {		protected var _timeline : DisplayObjectContainer;		protected var _spinner : DisplayObject;		//		private var _elementList : Array;		private var _bar : DisplayObject;
-		public function AbstractPreloader(inPreloaderElements : Array = null) {			_elementList = [];						if (inPreloaderElements != null) {				for each (var pe : AbstractPreloadElement in inPreloaderElements) {					addElement(pe);				}			}			// let the factory class call the start() method, after setting the timeline		}		public function set timeline(timeline : DisplayObjectContainer) : void {			_timeline = timeline;		}		public function get elementList() : Array {			return _elementList;		}		/**		 * Override when you want to put a delay between the prepare() and load() calls.		 */		public function start() : void {			if (!_timeline) throw new Error("Set the timeline before calling start()");						prepare();						load();		}		/**		 * Override when you want to create a custom loading/progress visual.		 */		protected function prepare() : void {			if (!_timeline) throw new Error("Set the timeline before calling prepare()");						_spinner = _timeline.addChild(new SpinnerIcon(0xFFFFFF, 10, 5, 2));			_spinner.x = _timeline.stage.stageWidth / 2;			_spinner.y = _timeline.stage.stageHeight / 2;						_bar = _timeline.addChild(ShapeDrawings.windowCentered(64, 6, 1, 0xFFFFFF, 1));			_bar.x = Math.round(_spinner.x);			_bar.y = Math.round(_spinner.y + _spinner.height);			_bar.filters = [new DropShadowFilter(4, 45, 0, 1, 4, 4)];		}		/**		 * Override when you want to add other elements to the loader queue.		 */		protected function load() : void {			addElement(new PEApplication(_timeline));			for each (var pe : AbstractPreloadElement in _elementList) {				pe.addEventListener(PreloadElementEvent.INITIALIZED, handleElementInitialized);				pe.addEventListener(PreloadElementEvent.PROGRESS, updateProgress);				pe.start();			}		}		/**		 * Override when you created a custom loading/progress visual, to clean up the stage.		 */		protected function finish() : void {			_spinner.parent.removeChild(_spinner);			_bar.parent.removeChild(_bar);						dispatchEvent(new Event(Event.COMPLETE));		}		protected function addElement(inPreloaderElement : AbstractPreloadElement) : void {			_elementList.push(inPreloaderElement);		}		/**		 * Optional override		 */		protected function updateProgress(event : Event) : void {			if (!_bar) return;						Draw.clear(_bar);			Draw.window(_bar, 64, 6, 1, 0xFFFFFF, 1, new Point(-32, -3));			Draw.rectangle(_bar, 60 * getProgress(), 2, 0xFFFFFF, 1, new Point(-30, -1));		}		protected function checkReady() : Boolean {			for each (var pe : AbstractPreloadElement in _elementList) {				if (!pe.isInitialized()) {					return false;				}			}			return true;		}		protected function getProgress() : Number {			var loadedBytes : uint = 0;			var totalBytes : uint = 0;						for each (var pe : AbstractPreloadElement in _elementList) {				loadedBytes += pe.progress * pe.weight;				totalBytes += pe.weight;			}			return loadedBytes / totalBytes;		}		private function handleElementInitialized(event : PreloadElementEvent) : void {			if (checkReady()) {				finish();			}		}		override public function toString() : String {			var s : String = "";			// s = "[ " + name + " ]:";			return s + getQualifiedClassName(this);		}	}}
+package com.epologee.application {
+	import com.epologee.application.preloader.indicator.SpinnerIcon;
+	import com.epologee.util.drawing.Draw;
+	import com.epologee.util.drawing.ShapeDrawings;
+	import com.greensock.events.LoaderEvent;
+	import com.greensock.loading.LoaderMax;
+	import com.greensock.loading.SelfLoader;
+	import com.greensock.loading.VideoLoader;
+	import com.greensock.loading.XMLLoader;
+
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.filters.DropShadowFilter;
+	import flash.geom.Point;
+
+	/**
+	 * @author Ralph Kuijpers @ Rocket Science Studios
+	 */
+	public class AbstractPreloader extends Sprite {
+		private var _preloadUrl : String;
+		private var _timeline : DisplayObjectContainer;
+		private var _spinner : DisplayObject;
+		private var _bar : DisplayObject;
+		private var _progress : Number;
+		private var _queue : LoaderMax;
+
+		public function AbstractPreloader(preloadUrl : String = null) {
+			LoaderMax.activate([SelfLoader, XMLLoader, VideoLoader]);
+			_preloadUrl = preloadUrl ? preloadUrl : "../xml/preload.xml";
+		}
+
+		public function set timeline(timeline : DisplayObjectContainer) : void {
+			_timeline = timeline;
+		}
+
+		public function get timeline() : DisplayObjectContainer {
+			return _timeline;
+		}
+
+		public function get progress() : Number {
+			return _progress;
+		}
+
+		public function start() : void {
+			prepare();
+
+			var xmlLoader : XMLLoader = new XMLLoader(_preloadUrl);
+			var applicationLoader : SelfLoader = new SelfLoader(_timeline);
+
+			_queue = new LoaderMax({name:"mainQueue", auditSize:true, onProgress:handleProgress, onComplete:handleComplete, onError:handleError});
+			_queue.append(xmlLoader);
+			_queue.append(applicationLoader);
+			_queue.load();
+		}
+
+		/**
+		 * Override when you want to create a custom loading/progress visual.
+		 */
+		protected function prepare() : void {
+			if (!_timeline) throw new Error("Set the timeline before calling prepare()");
+
+			_spinner = _timeline.addChild(new SpinnerIcon(0xFFFFFF, 10, 5, 2));
+			_spinner.x = _timeline.stage.stageWidth / 2;
+			_spinner.y = _timeline.stage.stageHeight / 2;
+
+			_bar = _timeline.addChild(ShapeDrawings.windowCentered(64, 6, 1, 0xFFFFFF, 1));
+			_bar.x = Math.round(_spinner.x);
+			_bar.y = Math.round(_spinner.y + _spinner.height);
+			_bar.filters = [new DropShadowFilter(4, 45, 0, 1, 4, 4)];
+		}
+
+		protected function updateProgress() : void {
+			if (!_bar) return;
+
+			Draw.clear(_bar);
+			Draw.window(_bar, 64, 6, 1, 0xFFFFFF, 1, new Point(-32, -3));
+			Draw.rectangle(_bar, 60 * progress, 2, 0xFFFFFF, 1, new Point(-30, -1));
+		}
+
+		protected function finish() : void {
+			_spinner.parent.removeChild(_spinner);
+			_bar.parent.removeChild(_bar);
+
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+
+		private function handleProgress(event : LoaderEvent) : void {
+			_progress = LoaderMax(LoaderMax.getLoader("mainQueue")).progress;
+			updateProgress();
+		}
+
+		private function handleComplete(event : LoaderEvent) : void {
+			finish();
+		}
+
+		private function handleError(event : LoaderEvent) : void {
+			fatal(event.text);
+		}
+	}
+}
