@@ -1,6 +1,5 @@
 package com.epologee.util.drawing {
 	import flash.display.Graphics;
-	import flash.display.Shape;
 	import flash.geom.Point;
 
 	/**
@@ -303,8 +302,16 @@ package com.epologee.util.drawing {
 			}
 		}
 
-		public static function lineStyle(canvas : Shape, thickness : Number = 1, color : int = 0x000000, alpha : Number = 1, pixelHinting : Boolean = false) : void {
+		public static function lineStyle(canvas : *, thickness : Number = 1, color : int = 0x000000, alpha : Number = 1, pixelHinting : Boolean = false) : void {
 			canvas.graphics.lineStyle(thickness, color, alpha, pixelHinting);
+		}
+
+		public static function beginFill(canvas : *, color : uint = 0xFF9900, alpha : Number = 1.0) : void {
+			canvas.graphics.beginFill(color, alpha);
+		}
+		
+		public static function endFill(canvas : *):void {
+			canvas.graphics.endFill();
 		}
 	}
 }

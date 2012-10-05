@@ -28,13 +28,13 @@ package com.epologee.util {
 		 * The first item will not be moved.
 		 * The first item may be the stage.
 		 */
-		public static function alignCenter(...inDisplayObjects : Array) : void {
+		public static function alignCenter(...displayObjects : Array) : void {
 			var first : DisplayObject;
-			while (!first && inDisplayObjects.length) {
-				first = inDisplayObjects.shift();
+			while (!first && displayObjects.length) {
+				first = displayObjects.shift();
 			}
 			
-			if (!inDisplayObjects.length) return;
+			if (!displayObjects.length) return;
 			
 			var alignTo : Rectangle = new Rectangle();
 			if (first is Stage) {
@@ -49,7 +49,7 @@ package com.epologee.util {
 				alignTo.height = first.height;
 			}
 			
-			for each (var next : DisplayObject in inDisplayObjects) {
+			for each (var next : DisplayObject in displayObjects) {
 				if (!next) continue;
 
 				var dw : Number = (alignTo.width - next.width) / 2;
