@@ -1,4 +1,5 @@
 package com.epologee.application {
+	import com.greensock.loading.ImageLoader;
 	import com.epologee.application.preloader.indicator.SpinnerIcon;
 	import com.epologee.util.drawing.Draw;
 	import com.epologee.util.drawing.ShapeDrawings;
@@ -27,7 +28,7 @@ package com.epologee.application {
 		private var _queue : LoaderMax;
 
 		public function AbstractPreloader(preloadUrl : String = null) {
-			LoaderMax.activate([SelfLoader, XMLLoader, VideoLoader]);
+			LoaderMax.activate([SelfLoader, XMLLoader, VideoLoader, ImageLoader]);
 			_preloadUrl = preloadUrl ? preloadUrl : "../xml/preload.xml";
 		}
 

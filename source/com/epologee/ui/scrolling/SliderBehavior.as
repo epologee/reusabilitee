@@ -67,6 +67,7 @@ package com.epologee.ui.scrolling {
 				_thumb.y = _bounds.top + _normalizedValue * _bounds.height / (_limitValue * _limitValue);
 			} else {
 				_thumb.x = _bounds.left + _normalizedValue * _bounds.width  / (_limitValue * _limitValue);
+				if (_thumb.x < _bounds.left) _thumb.x = _bounds.left;
 			}
 		}
 
