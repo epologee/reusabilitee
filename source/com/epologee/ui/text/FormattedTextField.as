@@ -115,6 +115,22 @@ package com.epologee.ui.text {
 			var fmt : TextFormat = getTextFormat();
 			return Number(fmt.letterSpacing);
 		}
+		
+		public function set underline(underline : Boolean) : void {
+			if (styleSheet)
+				return;
+
+			var fmt : TextFormat = getTextFormat();
+			fmt.underline = underline;
+			setTextFormat(fmt);
+
+			defaultTextFormat = fmt;
+		}
+
+		public function get underline() : Boolean {
+			var fmt : TextFormat = getTextFormat();
+			return Boolean(fmt.underline);
+		}
 
 		override public function set text(value : String) : void {
 			if (value == null) {
