@@ -14,10 +14,8 @@ class WrappedCall {
 
 	/**
 	 * Stores a call for later execution.
-	 * @param inCallback: the callback function to be called when done waiting
-	 * @param inTime: the number of frames to wait; when left out, or set to 1 or 0, one frame is waited
-	 * @param inParams: list of parameters to pass to the callback function
-	 * @param inStartInstantly: if set to false, you have to call resetAndStart() manually.
+	 * @param callback: the callback function to be called when done waiting
+	 * @param params: list of parameters to pass to the callback function
 	 */
 	public function WrappedCall(callback : Function, params : Array) {
 		_stack = new Error().getStackTrace();

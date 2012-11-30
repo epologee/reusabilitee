@@ -20,7 +20,8 @@ package com.epologee.application {
 	 * @author Ralph Kuijpers @ Rocket Science Studios
 	 */
 	public class AbstractPreloader extends Sprite {
-		private var _preloadUrl : String;
+		protected var _preloadUrl : String;
+		//
 		private var _timeline : DisplayObjectContainer;
 		private var _spinner : DisplayObject;
 		private var _bar : DisplayObject;
@@ -47,12 +48,16 @@ package com.epologee.application {
 		public function start() : void {
 			prepare();
 
-			var xmlLoader : XMLLoader = new XMLLoader(_preloadUrl);
-			var applicationLoader : SelfLoader = new SelfLoader(_timeline);
-
 			_queue = new LoaderMax({name:"mainQueue", auditSize:true, onProgress:handleProgress, onComplete:handleComplete, onError:handleError});
-			_queue.append(xmlLoader);
+
+			if (_preloadUrl) {
+				var xmlLoader : XMLLoader = new XMLLoader(_preloadUrl);
+				_queue.append(xmlLoader);
+			}
+			
+			var applicationLoader : SelfLoader = new SelfLoader(_timeline);
 			_queue.append(applicationLoader);
+
 			_queue.load();
 		}
 

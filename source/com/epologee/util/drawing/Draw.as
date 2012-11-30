@@ -262,13 +262,20 @@ package com.epologee.util.drawing {
 				return null;
 
 			var g : Graphics = canvas.graphics;
-			g.lineStyle(thickness, color, alpha);
-			g.beginFill(color, alpha);
+
+			if (color != NO_COLOR) {
+				g.lineStyle(thickness, color, alpha);
+				g.beginFill(color, alpha);
+			}
+			
 			g.lineTo(0, 0);
 			g.lineTo(width, height);
 			g.moveTo(width, 0);
 			g.lineTo(0, height);
-			g.endFill();
+
+			if (color != NO_COLOR) {
+				g.endFill();
+			}
 
 			return canvas;
 		}
@@ -309,8 +316,8 @@ package com.epologee.util.drawing {
 		public static function beginFill(canvas : *, color : uint = 0xFF9900, alpha : Number = 1.0) : void {
 			canvas.graphics.beginFill(color, alpha);
 		}
-		
-		public static function endFill(canvas : *):void {
+
+		public static function endFill(canvas : *) : void {
 			canvas.graphics.endFill();
 		}
 	}
