@@ -9,9 +9,9 @@ package com.epologee.audio {
 	 * @author Eric-Paul Lecluse | epologee.com � 2009
 	 */
 	public class AudioEngine {
-		private var _soundsByName : Dictionary;
-		private var _masterVolume : Number;
-		private var _muted : Boolean;
+		protected var _soundsByName : Dictionary;
+		protected var _masterVolume : Number;
+		protected var _muted : Boolean;
 
 		public function AudioEngine() {
 			_soundsByName = new Dictionary();
@@ -76,7 +76,7 @@ package com.epologee.audio {
 		public function isPlaying(inName : String) : Boolean {
 			var ms : IAudioSample = _soundsByName[inName] as IAudioSample;
 			if (!ms) {
-				logger.warn(inName + " not found");
+				logger.warn(inName + " not found"); 
 				return false;
 			}
 			
