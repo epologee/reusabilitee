@@ -21,8 +21,8 @@ package com.epologee.application {
 	 */
 	public class AbstractPreloader extends Sprite {
 		protected var _preloadUrl : String;
+		protected var _timeline : DisplayObjectContainer;
 		//
-		private var _timeline : DisplayObjectContainer;
 		private var _spinner : DisplayObject;
 		private var _bar : DisplayObject;
 		private var _progress : Number;
@@ -47,7 +47,10 @@ package com.epologee.application {
 
 		public function start() : void {
 			prepare();
+			startPreloading();
+		}
 
+		protected function startPreloading() : void {
 			_queue = new LoaderMax({name:"mainQueue", auditSize:true, onProgress:handleProgress, onComplete:handleComplete, onError:handleError});
 
 			if (_preloadUrl) {
