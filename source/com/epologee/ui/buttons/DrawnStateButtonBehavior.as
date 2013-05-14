@@ -18,6 +18,7 @@ package com.epologee.ui.buttons {
 	 * 			 
 	 */
 	[Event(name="CLICK", type="flash.events.MouseEvent")]
+	[Event(name="MOUSE_OVER", type="flash.events.MouseEvent")]
 	[Event(name="focusOut", type="flash.events.FocusEvent")]
 	[Event(name="focusIn", type="flash.events.FocusEvent")]
 	public class DrawnStateButtonBehavior extends EventDispatcher implements IEnableDisable {
@@ -91,6 +92,7 @@ package com.epologee.ui.buttons {
 				targetAsSprite.buttonMode = true;
 
 				_target.addEventListener(MouseEvent.MOUSE_OVER, handleMouseOver);
+				_target.addEventListener(MouseEvent.MOUSE_OVER, dispatchEvent);
 				_target.addEventListener(MouseEvent.MOUSE_OUT, handleMouseOut);
 				_target.addEventListener(MouseEvent.MOUSE_DOWN, handleMouseDown);
 				_target.addEventListener(MouseEvent.CLICK, dispatchEvent);
